@@ -30,15 +30,15 @@ class HomeViewModel extends Cubit {
     }
   }
 
-  void deleteWeight(String id) async {
+  Future<void> deleteWeight(String id) async {
     Either response = await _deleteWeightUseCase.execute(id);
     response.fold(
         (failure) =>
             emit(BaseErrorState("Something went wrong while deleting weight")),
-        (r) => null);
+        (_) => null);
   }
 
-  void signOut() async {
+  Future<void> signOut() async {
     Either response = await _signOutUseCase.execute(NoParams());
     response.fold(
         (failure) =>

@@ -12,7 +12,7 @@ class SignInViewModel extends Cubit<BaseStates> {
 
   SignInViewModel(this._anonymousSignInUseCase) : super(BaseInitialState());
 
-  void signIn() async {
+  Future<void> signIn() async {
     emit(BaseLoadingState());
     Either<Failure, void> response =
         await _anonymousSignInUseCase.execute(NoParams());

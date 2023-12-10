@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -12,15 +11,18 @@ import '../../../../domain/models/failures.dart';
 @Injectable(as: AuthRemoteDataSource)
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   final FirebaseAuth _authService;
-  final FirebaseFirestore _firestoreService;
+  final FirestoreServices _firestoreServices;
 
-  AuthRemoteDataSourceImpl(this._authService, this._firestoreService);
+  AuthRemoteDataSourceImpl(this._authService, this._firestoreServices);
 
   @override
   Future<Either<Failure, UserCredential>> signIn() async {
     try {
       final userCredential = await _authService.signInAnonymously();
-      _firestoreService.addUserFromCredential(userCredential);
+
+      _firestoreServices.addUserFromCredential(userCredential.user!.uid,
+          userCredential.user!.email ?? "", userCredential.user!.isAnonymous);
+
       return Right(userCredential);
     } on FirebaseAuthException catch (e) {
       if (kDebugMode) {

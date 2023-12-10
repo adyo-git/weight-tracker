@@ -1,26 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:injectable/injectable.dart';
 import 'package:weight_tracker/domain/models/app_user.dart';
 import 'package:weight_tracker/domain/models/weight.dart';
 
-extension Collections on FirebaseFirestore {
+@injectable
+class FirestoreServices {
+  final FirebaseFirestore _firestore;
+
+  FirestoreServices(this._firestore);
+
   CollectionReference<AppUser> get userCollection {
-    return collection("users").withConverter<AppUser>(
+    return _firestore.collection("users").withConverter<AppUser>(
         fromFirestore: (snapshot, _) => AppUser.fromJson(snapshot.data()!),
         toFirestore: (user, _) => user.toJson());
   }
 
-  Future<void> addUserFromCredential(UserCredential credential) {
-    AppUser user = AppUser(
-        id: credential.user!.uid,
-        email: credential.user!.email,
-        isAnonymous: credential.user!.isAnonymous);
+  Future<void> addUserFromCredential(
+      String id, String email, bool isAnonymous) {
+    AppUser user = AppUser(id: id, email: email, isAnonymous: isAnonymous);
     var userDoc = userCollection.doc(user.id);
     return userDoc.set(user);
-  }
-
-  DocumentReference<AppUser> getCurrentUserDoc(String id) {
-    return (userCollection.doc(id));
   }
 
   CollectionReference<Weight> getUserWeightsCollection(String id) {

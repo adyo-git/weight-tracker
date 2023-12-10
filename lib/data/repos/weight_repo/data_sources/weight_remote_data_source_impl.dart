@@ -10,16 +10,16 @@ import 'package:weight_tracker/domain/utils/constants.dart';
 
 @Injectable(as: WeightRemoteDataSource)
 class WeightRemoteDataSourceImpl extends WeightRemoteDataSource {
-  final FirebaseFirestore _firestore;
   final FirebaseAuth _authService;
+  final FirestoreServices _firestoreServices;
 
-  WeightRemoteDataSourceImpl(this._firestore, this._authService);
+  WeightRemoteDataSourceImpl(this._authService, this._firestoreServices);
 
   @override
   Future<Either<Failure, void>> editWeight(String id, double weight) async {
     try {
       var uid = _authService.currentUser!.uid;
-      var doc = _firestore.getUserWeightsCollection(uid).doc(id);
+      var doc = _firestoreServices.getUserWeightsCollection(uid).doc(id);
       return Right(await doc.update({"weight": weight}));
     } catch (_) {
       return Left(Failure(Constants.defaultErrorMessage));
@@ -29,7 +29,7 @@ class WeightRemoteDataSourceImpl extends WeightRemoteDataSource {
   @override
   Stream<QuerySnapshot<Weight>> getWeightStream() {
     var uid = _authService.currentUser!.uid;
-    var weightsCollection = _firestore.getUserWeightsCollection(uid);
+    var weightsCollection = _firestoreServices.getUserWeightsCollection(uid);
     return weightsCollection.orderBy("date").snapshots();
   }
 
@@ -37,7 +37,7 @@ class WeightRemoteDataSourceImpl extends WeightRemoteDataSource {
   Future<Either<Failure, void>> addWeight(double weight) async {
     try {
       var uid = _authService.currentUser!.uid;
-      var doc = _firestore.getUserWeightsCollection(uid).doc();
+      var doc = _firestoreServices.getUserWeightsCollection(uid).doc();
       var docData = Weight(id: doc.id, weight: weight, date: DateTime.now());
       return Right(await doc.set(docData));
     } catch (_) {
@@ -49,7 +49,7 @@ class WeightRemoteDataSourceImpl extends WeightRemoteDataSource {
   Future<Either<Failure, void>> deleteWeight(String id) async {
     try {
       var uid = _authService.currentUser!.uid;
-      var doc = _firestore.getUserWeightsCollection(uid).doc(id);
+      var doc = _firestoreServices.getUserWeightsCollection(uid).doc(id);
       return Right(await doc.delete());
     } catch (_) {
       return Left(Failure(Constants.defaultErrorMessage));
