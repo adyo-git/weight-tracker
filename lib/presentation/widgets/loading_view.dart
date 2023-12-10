@@ -8,7 +8,7 @@ class LoadingView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-          height: 15.h, width: 15.h,
+          height: 5.h, width: 5.h,
           child: const CircularProgressIndicator()),
     );
   }
