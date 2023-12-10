@@ -1,20 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weight_tracker/app/app_router.dart';
+import 'package:weight_tracker/app_cubit.dart';
+import 'package:weight_tracker/app_states.dart';
+import 'package:weight_tracker/domain/di/di.dart';
+import 'package:weight_tracker/presentation/screens/home/home_screen.dart';
+import 'package:weight_tracker/presentation/screens/sign_in/sign_in_screen.dart';
 
 class MyApp extends StatelessWidget {
   static late BuildContext appContext;
-  const MyApp({super.key});
+  final AppCubit _appCubit = getIt()..loadCurrentUser();
 
-  // This widget is the root of your application.
+  MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      onGenerateTitle: (context){
-        appContext = context;
-        return "Weight Tracker";
-      },
-      onGenerateRoute: AppRouter.generatedRoute,
-      initialRoute: AppRouter.initialRoute,
+    return BlocProvider(
+      create: (_) => _appCubit,
+      child: BlocBuilder(
+        bloc: _appCubit,
+        builder: (context, state) {
+          if (state is AppUserLoadedState) {
+            AppRouter.initialRoute =
+                state.isSignedIn  ? SignInScreen.id : HomeScreen.id;
+            return MaterialApp(
+              onGenerateTitle: (context) {
+                appContext = context;
+                return "Weight Tracker";
+              },
+              onGenerateRoute: AppRouter.generatedRoute,
+              initialRoute: AppRouter.initialRoute,
+            );
+          } else {
+            return MaterialApp(
+              onGenerateTitle: (context) {
+                appContext = context;
+                return "Weight Tracker";
+              },
+              onGenerateRoute: AppRouter.generatedRoute,
+              initialRoute: AppRouter.initialRoute,
+            );
+          }
+        },
+      ),
     );
   }
 }

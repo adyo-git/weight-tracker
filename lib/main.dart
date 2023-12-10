@@ -7,6 +7,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
   await AppFirebase.initializeFireBase();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 

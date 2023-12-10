@@ -3,7 +3,7 @@ import 'package:weight_tracker/presentation/screens/home/home_screen.dart';
 import 'package:weight_tracker/presentation/screens/sign_in/sign_in_screen.dart';
 
 class AppRouter {
-  static const String initialRoute = SignInScreen.id;
+  static String initialRoute = SignInScreen.id;
 
   static Route<dynamic> generatedRoute(RouteSettings settings) {
     // String arguments = settings.arguments;
