@@ -31,9 +31,8 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, void>> signOut() {
-    // TODO: implement signOut
-    throw UnimplementedError();
+  Future<Either<Failure, void>> signOut() async {
+    return Right(_authService.signOut());
   }
 
   @override

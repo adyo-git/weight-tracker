@@ -29,19 +29,21 @@ import '../../data/repos/weight_repo/data_sources/weight_remote_data_source_impl
 import '../../data/repos/weight_repo/weight_repo_impl.dart' as _i10;
 import '../../presentation/screens/add_bottom_sheet/add_view_model.dart'
     as _i12;
-import '../../presentation/screens/home/home_view_model.dart' as _i20;
-import '../../presentation/screens/sign_in/sign_in_view_model.dart' as _i25;
+import '../../presentation/screens/edit_weight_bottom_sheet/edit_weight_view_model.dart'
+    as _i19;
+import '../../presentation/screens/home/home_view_model.dart' as _i25;
+import '../../presentation/screens/sign_in/sign_in_view_model.dart' as _i26;
 import '../repos/auth_repo.dart' as _i15;
 import '../repos/weight_repo.dart' as _i9;
 import '../usecases/add_weight_usecase.dart' as _i11;
 import '../usecases/anonymous_sign_in_usecase.dart' as _i23;
 import '../usecases/delete_weight_usecase.dart' as _i17;
 import '../usecases/edit_weight_usecase.dart' as _i18;
-import '../usecases/get_weights_stream_usecase.dart' as _i19;
+import '../usecases/get_weights_stream_usecase.dart' as _i20;
 import '../usecases/is_user_signed_in_usecase.dart' as _i21;
 import '../usecases/sign_out_usecase.dart' as _i22;
-import 'modules/di_module.dart' as _i27;
-import 'modules/fb_module.dart' as _i26;
+import 'modules/di_module.dart' as _i28;
+import 'modules/fb_module.dart' as _i27;
 
 extension GetItInjectableX on _i1.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -84,13 +86,10 @@ extension GetItInjectableX on _i1.GetIt {
         () => _i17.DeleteWeightUseCase(gh<_i9.WeightRepo>()));
     gh.factory<_i18.EditWeightUseCase>(
         () => _i18.EditWeightUseCase(gh<_i9.WeightRepo>()));
-    gh.factory<_i19.GetWeightsStreamUseCase>(
-        () => _i19.GetWeightsStreamUseCase(gh<_i9.WeightRepo>()));
-    gh.factory<_i20.HomeViewModel>(() => _i20.HomeViewModel(
-          gh<_i19.GetWeightsStreamUseCase>(),
-          gh<_i18.EditWeightUseCase>(),
-          gh<_i17.DeleteWeightUseCase>(),
-        ));
+    gh.factory<_i19.EditWeightViewModel>(
+        () => _i19.EditWeightViewModel(gh<_i18.EditWeightUseCase>()));
+    gh.factory<_i20.GetWeightsStreamUseCase>(
+        () => _i20.GetWeightsStreamUseCase(gh<_i9.WeightRepo>()));
     gh.factory<_i21.IsUserSignedInUseCase>(
         () => _i21.IsUserSignedInUseCase(gh<_i15.AuthRepo>()));
     gh.factory<_i22.SignOutUseCase>(
@@ -99,12 +98,17 @@ extension GetItInjectableX on _i1.GetIt {
         () => _i23.AnonymousSignInUseCase(gh<_i15.AuthRepo>()));
     gh.factory<_i24.AppCubit>(
         () => _i24.AppCubit(gh<_i21.IsUserSignedInUseCase>()));
-    gh.factory<_i25.SignInViewModel>(
-        () => _i25.SignInViewModel(gh<_i23.AnonymousSignInUseCase>()));
+    gh.factory<_i25.HomeViewModel>(() => _i25.HomeViewModel(
+          gh<_i20.GetWeightsStreamUseCase>(),
+          gh<_i17.DeleteWeightUseCase>(),
+          gh<_i22.SignOutUseCase>(),
+        ));
+    gh.factory<_i26.SignInViewModel>(
+        () => _i26.SignInViewModel(gh<_i23.AnonymousSignInUseCase>()));
     return this;
   }
 }
 
-class _$FbModule extends _i26.FbModule {}
+class _$FbModule extends _i27.FbModule {}
 
-class _$DIModule extends _i27.DIModule {}
+class _$DIModule extends _i28.DIModule {}

@@ -6,15 +6,17 @@ import '../../app/app_colors.dart';
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final Function()? onBackPressed;
+  final List<Widget>? actions;
 
   const DefaultAppBar(
-      {super.key, required this.title, this.onBackPressed});
+      {super.key, required this.title, this.onBackPressed, this.actions});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: AppColors.mainColor,
       elevation: 0,
+      actions: actions,
       leading: onBackPressed == null
           ? const SizedBox()
           : IconButton(

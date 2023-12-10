@@ -24,8 +24,7 @@ class AuthRepoImpl extends AuthRepo {
 
   @override
   Future<Either<Failure, void>> signOut() {
-    // TODO: implement signOut
-    throw UnimplementedError();
+    return _remoteDataSource.signOut();
   }
 
   @override

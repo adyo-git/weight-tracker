@@ -3,23 +3,33 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weight_tracker/app/app_colors.dart';
 import 'package:weight_tracker/app/extensions.dart';
 import 'package:weight_tracker/domain/di/di.dart';
+import 'package:weight_tracker/domain/models/weight.dart';
 import 'package:weight_tracker/presentation/base/base_states.dart';
-import 'package:weight_tracker/presentation/screens/add_bottom_sheet/add_view_model.dart';
+import 'package:weight_tracker/presentation/screens/edit_weight_bottom_sheet/edit_weight_view_model.dart';
 import 'package:weight_tracker/presentation/utils/toast_utils.dart';
 import 'package:weight_tracker/presentation/widgets/custom_filled_button.dart';
 import 'package:weight_tracker/presentation/widgets/custom_text_field.dart';
 
-class AddWeightBottomSheet extends StatefulWidget {
-  const AddWeightBottomSheet({super.key});
+class EditWeightBottomSheet extends StatefulWidget {
+  final Weight weight;
+
+  const EditWeightBottomSheet({super.key, required this.weight});
 
   @override
-  State<AddWeightBottomSheet> createState() => _AddWeightBottomSheetState();
+  State<EditWeightBottomSheet> createState() => _EditWeightBottomSheetState();
 }
 
-class _AddWeightBottomSheetState extends State<AddWeightBottomSheet> {
-  late AddWeightViewModel viewModel = getIt();
+class _EditWeightBottomSheetState extends State<EditWeightBottomSheet> {
+  late EditWeightViewModel viewModel = getIt();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  TextEditingController weightController = TextEditingController();
+  late TextEditingController weightController;
+
+  @override
+  void initState() {
+    super.initState();
+    weightController =
+        TextEditingController(text: widget.weight.weight.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +57,7 @@ class _AddWeightBottomSheetState extends State<AddWeightBottomSheet> {
                 height: 1.h,
               ),
               const Text(
-                "Add new weight!",
+                "Edit",
                 style: TextStyle(fontSize: 18, color: AppColors.mainColor),
               ),
               SizedBox(
@@ -69,10 +79,11 @@ class _AddWeightBottomSheetState extends State<AddWeightBottomSheet> {
                 height: 2.h,
               ),
               CustomFilledButton(
-                  title: "Add",
+                  title: "Edit",
                   onTap: () {
                     if (!formKey.currentState!.validate()) return;
-                    viewModel.addWeight(double.parse(weightController.text));
+                    viewModel.editWeight(
+                        widget.weight.id, double.parse(weightController.text));
                   }),
               SizedBox(
                 height: 2.h,
