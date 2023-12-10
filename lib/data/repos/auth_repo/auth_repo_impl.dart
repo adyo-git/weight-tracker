@@ -6,8 +6,6 @@ import 'package:weight_tracker/domain/models/failures.dart';
 import 'package:weight_tracker/domain/repos/auth_repo.dart';
 import 'package:weight_tracker/domain/utils/constants.dart';
 
-import '../../../domain/models/app_user.dart';
-
 @Injectable(as: AuthRepo)
 class AuthRepoImpl extends AuthRepo {
   final InternetConnectionChecker _connectionChecker;

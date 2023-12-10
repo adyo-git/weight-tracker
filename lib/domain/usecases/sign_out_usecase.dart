@@ -5,7 +5,7 @@ import 'package:weight_tracker/domain/repos/auth_repo.dart';
 import 'package:weight_tracker/domain/usecases/base_usecase.dart';
 
 @injectable
-class SignOutUseCase implements BaseUseCase {
+class SignOutUseCase implements BaseAsyncUseCase {
   AuthRepo authRepo;
 
   SignOutUseCase(this.authRepo);

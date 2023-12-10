@@ -10,4 +10,5 @@ class AppColors {
   static const Color reqStringsColor = Color(0xff4A535A);
   static const Color white = Color(0xFFFFFFFF);
   static const Color errorToastBg = Color(0xfff80a0a);
+  static const Color error = Color(0xfff80a0a);
 }

@@ -6,13 +6,13 @@ import 'package:weight_tracker/domain/repos/weight_repo.dart';
 import 'base_usecase.dart';
 
 @injectable
-class AddWeightUseCase implements BaseAsyncUseCase<double, void> {
+class DeleteWeightUseCase implements BaseAsyncUseCase<String, void> {
   final WeightRepo _repo;
 
-  AddWeightUseCase(this._repo);
+  DeleteWeightUseCase(this._repo);
 
   @override
-  Future<Either<Failure, void>> execute(weight) {
-    return _repo.addWeight(weight);
+  Future<Either<Failure, void>> execute(id) {
+    return _repo.deleteWeight(id);
   }
 }

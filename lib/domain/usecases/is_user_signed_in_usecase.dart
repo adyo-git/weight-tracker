@@ -6,12 +6,13 @@ import 'package:weight_tracker/domain/repos/auth_repo.dart';
 import 'package:weight_tracker/domain/usecases/base_usecase.dart';
 
 @injectable
-class AnonymousSignInUseCase implements BaseAsyncUseCase<NoParams, void> {
+class IsUserSignedInUseCase implements BaseAsyncUseCase<NoParams, bool> {
   final AuthRepo _authRepo;
-  AnonymousSignInUseCase(this._authRepo);
+
+  IsUserSignedInUseCase(this._authRepo);
 
   @override
-  Future<Either<Failure, void>> execute(input) async {
-    return _authRepo.anonymousSignIn();
+  Future<Either<Failure, bool>> execute(input) async {
+    return Future.value(Right(_authRepo.isUserSignedIn()));
   }
 }

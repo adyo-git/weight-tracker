@@ -1,30 +1,58 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 import 'package:weight_tracker/data/repos/weight_repo/data_sources/weight_remote_data_source.dart';
+import 'package:weight_tracker/data/utils/firestore_extenions.dart';
 import 'package:weight_tracker/domain/models/failures.dart';
 import 'package:weight_tracker/domain/models/weight.dart';
+import 'package:weight_tracker/domain/utils/constants.dart';
 
 @Injectable(as: WeightRemoteDataSource)
-class WeightRemoteDataSourceImpl extends WeightRemoteDataSource{
-  FirebaseFirestore _firestore;
-  WeightRemoteDataSourceImpl(this._firestore);
+class WeightRemoteDataSourceImpl extends WeightRemoteDataSource {
+  final FirebaseFirestore _firestore;
+  final FirebaseAuth _authService;
+
+  WeightRemoteDataSourceImpl(this._firestore, this._authService);
 
   @override
-  Future<Either<Failure, void>> editWeight(String id) {
-    // TODO: implement editWeight
-    throw UnimplementedError();
+  Future<Either<Failure, void>> editWeight(String id, double weight) async {
+    try {
+      var uid = _authService.currentUser!.uid;
+      var doc = _firestore.getUserWeightsCollection(uid).doc(id);
+      return Right(await doc.update({"weight": weight}));
+    } catch (_) {
+      return Left(Failure(Constants.defaultErrorMessage));
+    }
   }
 
   @override
-  Future<Stream<Weight>> getWeightStream() {
-    // TODO: implement getWeightStream
-    throw UnimplementedError();
+  Stream<QuerySnapshot<Weight>> getWeightStream() {
+    var uid = _authService.currentUser!.uid;
+    var weightsCollection = _firestore.getUserWeightsCollection(uid);
+    return weightsCollection.orderBy("date").snapshots();
   }
 
   @override
-  Future<Either<Failure, void>> addWeight(DateTime date, double weight) {
-    // TODO: implement addWeight
-    throw UnimplementedError();
+  Future<Either<Failure, void>> addWeight(double weight) async {
+    try {
+      var uid = _authService.currentUser!.uid;
+      var doc = _firestore.getUserWeightsCollection(uid).doc();
+      var docData = Weight(id: doc.id, weight: weight, date: DateTime.now());
+      return Right(await doc.set(docData));
+    } catch (_) {
+      return Left(Failure(Constants.defaultErrorMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteWeight(String id) async {
+    try {
+      var uid = _authService.currentUser!.uid;
+      var doc = _firestore.getUserWeightsCollection(uid).doc(id);
+      return Right(await doc.delete());
+    } catch (_) {
+      return Left(Failure(Constants.defaultErrorMessage));
+    }
   }
 }
