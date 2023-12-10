@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget get listEmptyView => const Center(
-        child: Text("There no added weights yet."),
+        child: Text("There are no added weights yet."),
       );
 
   get buildAddFab => FloatingActionButton(
