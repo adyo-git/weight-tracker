@@ -5,6 +5,9 @@ A simple weight tracker app built using Flutter and Firebase
 - Weights can be edited by tapping an existing weight row
 - Weights can be deleted by swiping a weight row to the right
 
+A recording of the app is included in the root of the project named `Weight Tracker App Demo.mp4`
+and can also be found here: https://drive.google.com/file/d/1hqhn2H_LwbvL_rpFL4AJnId0RNlyFRtD/view?usp=sharing
+
 ## Getting Started
 
 - This project was built using clean architecture for scalability and maintainability. The layers are:
